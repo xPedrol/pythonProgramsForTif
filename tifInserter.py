@@ -1,3 +1,4 @@
+# Insert the tif files in the database and move the files to the correct folder
 # coding=utf-8
 import textract
 import re
@@ -11,11 +12,11 @@ import mysql.connector
 
 def getConnection():
     mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="Lampeh2004",
-    database="casasetecentista",
-    port=3306
+        host="localhost",
+        user="root",
+        password="Lampeh2004",
+        database="casasetecentista",
+        port=3306
     )
     return mydb
 
@@ -73,7 +74,7 @@ def insert(folderName):
     # os.chdir('D:/1751-1780/1751-1760 Lançamentos 2020 Concluidos2/'+folderName)
     ficha = os.listdir(folderName)[-1]
     # ALTERAR URL AQUI
-    readText(directory + '/' +folderName + '/' + ficha)
+    readText(directory + '/' + folderName + '/' + ficha)
     newtext = getText()
     numberData = re.findall(r'\d+', newtext[1])
     Codice = numberData[0]
@@ -119,26 +120,28 @@ def insert(folderName):
     OficioURL = defineOficio(Oficio)
     foarmtedOficio = str(Oficio).zfill(2)
     # ALTERAR URL AQUI
-    newD =directory.replace('\\','/')
-    Source = newD +'/' + folderName
+    newD = directory.replace('\\', '/')
+    Source = newD + '/' + folderName
     URL = defineURL(OficioURL, Ano, Codice, Auto)
-    URLForInsert = URL.replace('C:','')+'/'
+    URLForInsert = URL.replace('C:', '') + '/'
     print(Source)
     print(URL)
     mydb = getConnection()
     mycursor = mydb.cursor()
 
     sql = 'INSERT INTO documentos (`Tipo`, `Inventariante`, `Inventariado`, `MonteMor`, `Local`, `Ano`, `Codice`, `Auto`, `Oficio`, `OBS`, `NumImagens`, `Imagem`) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'
-    val = ("INV",Inventariante,Inventariado,MonteMor,Local,Ano,Codice,Auto,foarmtedOficio,OBS,NImagens,URLForInsert)
+    val = (
+        "INV", Inventariante, Inventariado, MonteMor, Local, Ano, Codice, Auto, foarmtedOficio, OBS, NImagens,
+        URLForInsert)
     mycursor.execute(sql, val)
     mydb.commit()
     if mycursor.rowcount > 0:
         mycursor.execute("SELECT MAX(id) FROM documentos")
-        os.remove(directory + '/' +folderName + '/' + ficha)
+        os.remove(directory + '/' + folderName + '/' + ficha)
         os.makedirs(URL)
         move(Source, URL)
-        #os.rmdir(Source)
-        with open(URL+'/Imagens Digitalizadas.txt', 'w') as f:
+        # os.rmdir(Source)
+        with open(URL + '/Imagens Digitalizadas.txt', 'w') as f:
             f.write(str(mycursor.lastrowid))
     mydb.close()
 
@@ -149,14 +152,13 @@ directory = input("Caminho do diretório:")
 # 'E:/Pedro - 2o Oficio -  lançamentos 2022/2o Oficio Lançamento outubro 2022'
 os.chdir(directory)
 folder = os.listdir()
-i=1
+i = 1
 for name in folder:
-    if 'CONCLUIDO' in name:
-        # auto = os.listdir(name)
-        print("Inserindo: " + name)
-        # print(auto[1])
-        insert(name)
-        print("---------------------------------------")
-        i=i+1
+    # auto = os.listdir(name)
+    print("Inserindo: " + name)
+    # print(auto[1])
+    insert(name)
+    print("---------------------------------------")
+    i = i + 1
 print(f'Total de {i} documentos')
 ##progresssssssssss

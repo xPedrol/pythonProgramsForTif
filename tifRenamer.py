@@ -1,3 +1,4 @@
+# Rename and convert tif files to tif pyramidal
 import os
 
 size = (100, 100)
@@ -31,7 +32,7 @@ def readDirectory(dir, parentDir=None):
             newFullDir = parentDir + "\\" + fileBaseName + "." + ano + "." + codice + "." + auto + "." + dir
             try:
                 os.system(
-                'vips tiffsave "' + fullDir + '" "' + newFullDir + '" --compression=jpeg --Q=75 --tile --tile-width=256 --tile-height=256 --pyramid')
+                    'vips tiffsave "' + fullDir + '" "' + newFullDir + '" --compression=jpeg --Q=75 --tile --tile-width=256 --tile-height=256 --pyramid')
             except:
                 print("Error in VIPS")
             os.remove(fullDir)

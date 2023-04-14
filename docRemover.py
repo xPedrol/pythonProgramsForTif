@@ -1,4 +1,6 @@
+# Remove all .doc files from a directory and all subdirectories
 import os
+
 directory = input("Enter the directory: ")
 
 

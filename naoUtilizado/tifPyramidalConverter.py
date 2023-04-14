@@ -1,3 +1,4 @@
+# Não utilizado
 import os
 
 directory = input("Caminho do diretório:")

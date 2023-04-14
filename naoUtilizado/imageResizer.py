@@ -1,3 +1,4 @@
+# Não utilizado
 import os
 
 from PIL import Image
