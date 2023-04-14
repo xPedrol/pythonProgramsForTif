@@ -5,7 +5,6 @@ directory = input("Enter the directory: ")
 print("File in directory: % s" % directory)
 fileBaseName = "CSM.02.INV"
 searchFor = ["Codice", "Códice", "Auto"]
-convertKey = "needConvert"
 
 
 # CSM.02.INV.1718.84.1790.00001
@@ -24,22 +23,19 @@ def readDirectory(dir, parentDir=None):
         splitDir = (parentDir.split("\\")[-1]).split(" ")
         contained = [a in splitDir for a in searchFor]
         if True in contained:
-            if not convertKey in dir and "CSM" not in dir:
-                # remove file
-                os.remove(fullDir)
-                print("Removed % s" % dir)
-                return
             if "CSM" in dir:
                 return
             ano = splitDir[0]
             codice = splitDir[2]
             auto = splitDir[4]
-            fullName = fileBaseName + "." + ano + "." + codice + "." + auto + "." + dir
-            # remove needConvert from file name
-            fullName = fullName.replace(convertKey + ".", "")
-            # rename file
-            os.rename(fullDir, parentDir + "\\" + fullName)
-            print("Renamed % s to % s" % (dir, fullName))
+            newFullDir = parentDir + "\\" + fileBaseName + "." + ano + "." + codice + "." + auto + "." + dir
+            try:
+                os.system(
+                'vips tiffsave "' + fullDir + '" "' + newFullDir + '" --compression=jpeg --Q=75 --tile --tile-width=256 --tile-height=256 --pyramid')
+            except:
+                print("Error in VIPS")
+            os.remove(fullDir)
+            print("Renamed % s to % s" % (dir, newFullDir))
 
 
 for infile in os.listdir(directory):
