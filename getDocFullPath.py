@@ -1,7 +1,9 @@
 import mysql.connector
 import os
 
-basePath = "C:\\Users\\gabri\\Documents\\GitHub\\arquivoscamara\\arquivos\\"
+basePath = "D:/Documentos Câmara/Arquivo da Câmara de Viçosa/"
+
+sql = "INSERT INTO documentspath (documentId, path) VALUES (%s, %s)"
 
 
 def readDirectory(dir, parentDir=None):
@@ -10,14 +12,15 @@ def readDirectory(dir, parentDir=None):
         for file in os.listdir(fullDir):
             readDirectory(file, fullDir)
     else:
-        print(fullDir)
+        return fullDir
+    return None
 
 
 # Conexão com o banco de dados
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="",
+    password="Lampeh2004",
     database="arquivoscamara",
     port="3306"
 )
@@ -33,16 +36,32 @@ mycursor.execute(sql)
 
 # Leitura dos resultados da consulta SQL
 result = mycursor.fetchall()
-sql = "INSERT INTO documentspath (documentId, path) VALUES (%s, %s)"
+
 # Exibição dos resultados
 for row in result:
+    if (row[-3] == None):
+        continue
+    splitPath = row[-3].split("/")[-2]
+    if ("LocalizaÃ§Ã£o" in splitPath):
+        splitPath = splitPath.replace("LocalizaÃ§Ã£o", "Localização")
     print("ID: ", row[0])
-    print("Path: ", row[-3])
+    print("Path: ", splitPath)
     print("\n")
+
     # verify files in path
-    for infile in os.listdir(basePath + row[-3]):
-        readDirectory(infile, basePath + row[-3])
+    try:
+        for infile in os.listdir(basePath + splitPath):
+            fullDir = readDirectory(infile, splitPath)
+            if (fullDir != None):
+                print(fullDir)
+                # mycursor.execute(sql, (row[0], fullDir))
+                # mydb.commit()
+    except:
+        print("Path not found")
         print("-----------------")
+    # if("99.99.102" in splitPath):
+    #   break
+    print("------------------")
 
 # Fechamento da conexão com o banco de dados
 mydb.close()
