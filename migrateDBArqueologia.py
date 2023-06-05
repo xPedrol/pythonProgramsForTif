@@ -39,48 +39,48 @@ mycursor = mydb.cursor()
 mycursor2 = mydb2.cursor()
 #
 # # Consulta SQL para selecionar todas as linhas da tabela 'minha_tabela'
-sql2 = "SELECT * FROM dadoscidades"
+sql2 = "SELECT * FROM wp_ninja_table_items"
 #
 # # Execução da consulta SQL
-mycursor.execute(sql2)
+mycursor2.execute(sql2)
 #
 # # Leitura dos resultados da consulta SQL
-result = mycursor.fetchall()
+result = mycursor2.fetchall()
 sql = "INSERT INTO dadoscidades (title,year,subject,comments,link,material,cityId,author) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"
 # # Exibição dos resultados
 for row in result:
     # print("ID: ", row[7])
-    if row[7] in libraryItems:
-        alterRowTypeSql = "UPDATE dadoscidades SET type = 'library' WHERE id = %s"
-    else:
-        alterRowTypeSql = "UPDATE dadoscidades SET type = 'archive' WHERE id = %s"
-    mycursor.execute(alterRowTypeSql, (row[0],))
-    mydb.commit()
+    # if row[7] in libraryItems:
+    #     alterRowTypeSql = "UPDATE dadoscidades SET type = 'library' WHERE id = %s"
+    # else:
+    #     alterRowTypeSql = "UPDATE dadoscidades SET type = 'archive' WHERE id = %s"
+    # mycursor.execute(alterRowTypeSql, (row[0],))
+    # mydb.commit()
     # print("Table ID: ", row[2])
     # print("Value: ", row[6])
     # print("\n")
-    # objeto = json.loads(row[6])
-    # tableId = row[2]
-    # if "historico" in objeto or "coluna_teste" in objeto:
-    #     print("Table ID: ", row[2])
-    #     print(objeto)
-    #     print("\n")
-    #     sql = "INSERT INTO historicoibge (description, cityId,url) VALUES (%s, %s,%s)"
-    #     link = objeto["link"] if "link" in objeto else None
-    #     description = objeto["historico"] if "historico" in objeto else objeto["coluna_teste"]
-    #     mycursor.execute(sql, (description, tableId, link))
-    #     mydb.commit()
+    objeto = json.loads(row[6])
+    tableId = row[2]
+    if "historico" in objeto or "coluna_teste" in objeto:
+        print("Table ID: ", row[2])
+        print(objeto)
+        print("\n")
+        sql = "INSERT INTO historicoibge (description, cityId,url) VALUES (%s, %s,%s)"
+        link = objeto["link"] if "link" in objeto else None
+        description = objeto["historico"] if "historico" in objeto else objeto["coluna_teste"]
+        mycursor.execute(sql, (description, tableId, link))
+        mydb.commit()
 
-    # if "titulo" in objeto:
-    #     ano = int(objeto["ano"]) if "ano" != "-" in objeto else 0
-    #     obs = objeto["observacoes"] if "observacoes" in objeto else ""
-    #     author = objeto["autor"] if "autor" in objeto else ""
-    #     link = objeto["link"] if "link" in objeto else ""
-    #     material = objeto["material"] if "material" in objeto else ""
-    #     assunto = objeto["assunto"] if "assunto" in objeto else ""
-    #     titulo = objeto["titulo"] if "titulo" in objeto else ""
-    #     mycursor.execute(sql, (titulo, ano, assunto, obs, link, material, int(row[2]), author))
-    #     mydb.commit()
+    if "titulo" in objeto:
+        ano = objeto["ano"] if "ano" in objeto else 0
+        obs = objeto["observacoes"] if "observacoes" in objeto else ""
+        author = objeto["autor"] if "autor" in objeto else ""
+        link = objeto["link"] if "link" in objeto else ""
+        material = objeto["material"] if "material" in objeto else ""
+        assunto = objeto["assunto"] if "assunto" in objeto else ""
+        titulo = objeto["titulo"] if "titulo" in objeto else ""
+        mycursor.execute(sql, (titulo, ano, assunto, obs, link, material, int(row[2]), author))
+        mydb.commit()
     # print(mycursor.rowcount, "linha(s) inserida(s).")
     # Fechamento da conexão com o banco de dados
 
