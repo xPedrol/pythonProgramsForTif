@@ -17,13 +17,15 @@ def readDirectory(dir, parentDir=None):
         for file in os.listdir(fullDir):
             readDirectory(file, fullDir)
     else:
-        print(fullDir)
+        # remove root_input_path from fullDir
+        newDir = fullDir.replace(root_input_path, "")
+        ocr_pdf(fullDir, root_output_path + newDir)
         # ocr_pdf(fullDir, fullDir)
 
 
 for infile in os.listdir(root_input_path):
     readDirectory(infile, root_input_path)
-    print("-----------------")
+    print("---------------------------------------------------------")
 
 
 
