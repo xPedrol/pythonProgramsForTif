@@ -1,4 +1,5 @@
 import os
+import shutil
 
 root_input_path = "D:\\Documentos Câmara\\Arquivo da Câmara de Viçosa"
 root_output_path = "D:\\VicosaDocumentos"
@@ -22,7 +23,7 @@ def readDirectory(dir, parentDir=None):
         if os.path.exists(root_output_path + newDir):
             print(f"O arquivo '{root_output_path + newDir}' já existe.")
         else:
-            os.system(f"copy {fullDir} {root_output_path + newDir}")
+            shutil.copy2(fullDir, root_output_path + newDir)
             print(f"O arquivo '{root_output_path + newDir}' foi copiado.")
 
 
