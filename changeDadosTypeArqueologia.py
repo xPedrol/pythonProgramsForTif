@@ -1,5 +1,4 @@
 import mysql.connector
-import json
 
 libraryItems = ['430', '434', '440', '444', '450', '453', '456', '461', '464', '468', '472', '477', '480', '483', '487',
                 '491', '495', '499', '502', '505', '508', '512', '517', '522', '528', '534']
@@ -9,7 +8,7 @@ try:
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="",
+        password="G21bxy.com",
         database="arqueologia",
         port="3306"
     )

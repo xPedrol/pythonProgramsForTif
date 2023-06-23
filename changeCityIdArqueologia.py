@@ -1,5 +1,4 @@
 import mysql.connector
-import json
 
 
 def get_properties_names(obj):
@@ -15,7 +14,7 @@ try:
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="",
+        password="G21bxy.com",
         database="arqueologia",
         port="3306"
     )
